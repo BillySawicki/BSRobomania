@@ -9,7 +9,7 @@ public class EnemyMovement : MonoBehaviour
     public float xDirection;
     private Rigidbody2D enemyRigidBody;
 
-    void Start(){
+    void Awake(){
         enemyRigidBody = GetComponent<Rigidbody2D>();
     }
     
@@ -17,6 +17,16 @@ public class EnemyMovement : MonoBehaviour
         if(collision.gameObject.tag == "Ground"){
             Vector2 jumpForce = new Vector2(xForce * xDirection, yForce);
             enemyRigidBody.AddForce(jumpForce);
+        }
+        
+        if(collision.gameObject.tag == "Enemy"){
+            Vector2 jumpForce = new Vector2(xForce * xDirection, yForce);
+            enemyRigidBody.AddForce(jumpForce);
+        }
+
+        if(collision.gameObject.tag == "Player"){
+            Vector2 bounceForce = new Vector2(xForce * xDirection * 3, yForce * -2);
+            collision.otherRigidbody.AddForce(bounceForce);
         }
     }
     private void FixedUpdate(){
@@ -27,6 +37,9 @@ public class EnemyMovement : MonoBehaviour
         if(transform.position.x >= 8){
             xDirection = -1;
             enemyRigidBody.AddForce(Vector2.left * xForce); 
+        }
+        if(transform.position.y >= 4){
+            enemyRigidBody.AddForce(Vector2.down * yForce);
         }
     }
 }
